@@ -17,15 +17,15 @@ def send_email():
         # 设置收件人邮箱，可以同时发送到多个邮箱（用list）
         TO = '1550505935@qq.com'
         # 设置附件模式
-        message = MIMEMultipart('mixed')
+        message = MIMEMultipart()
 
         ''' 添加正文 '''
         content = 'sir，附件为最新日期文件，请查收！'
-        content_msg = MIMEText(content)
+        content_msg = MIMEText(content,'plain','utf-8')
         message.attach(content_msg)
 
         ''' 添加word文件附件 '''
-        doc = '大气化学动力学.doc'
+        doc = '大气化学动力学.docx'
         doc_file = MIMEApplication(open(doc, 'rb').read())
         doc_file.add_header('Content-Disposition', 'attachment', filename=doc)
         message.attach(doc_file)
@@ -43,25 +43,25 @@ def send_email():
         message.attach(csv)
 
         ''' 添加图片文件附件 '''
-        image_file = open('imag1.jpg', 'rb').read()
+        image_file = open('image1.jpg', 'rb').read()
         image = MIMEImage(image_file)
         image.add_header('Content-Disposition', 'attachment', filename='imag1.jpg')
         message.attach(image)
 
         # 设置邮件发件人
-        message['From'] = FROM
+        message['From'] = 'wang140736399_29@163.com <wang140736399_29@163.com>'
         # 设置邮件收件人
         message['To'] = TO
         # 设置邮件标题
         message['Subject'] = SUBJECT
 
         # 获取SSL证书
-        email_client = smtplib.SMTP_SSL(host='smtp.qq.com')
+        email_client = smtplib.SMTP_SSL(HOST,465)
         # 设置域名和端口，端口为465
-        email_client.connect(HOST, '465')
+        # email_client.connect(HOST, 465)
         # 邮箱授权码
-        email_client.login(FROM, '你的授权码')
-        email_client.sendmail(from_addr=FROM, to_addrs=TO.split(','), msg=message.as_string())
+        email_client.login(FROM, 'URJWQFMGOLLYPJYQ')
+        email_client.sendmail(from_addr=FROM, to_addrs=TO, msg=message.as_string())
         # 关闭邮件发送客户端
         email_client.quit()
         print('发送成功！')
